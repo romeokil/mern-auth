@@ -1,14 +1,15 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import UserRoutes from './routes/UserRoutes.js'
 dotenv.config();
 //INITIALIZIING THE APPLICATION
 const app=express();
 //DEFINING PORT NO
-const PORT=8000;
+const PORT=3000;
 // console.log(PORT)
 //SERVER CONNECTED!!1
-app.listen(()=>{
+app.listen(PORT,()=>{
     console.log(PORT);
     console.log(`Server is running at ${PORT}!`);
     //DATABASE CONNECTION!!
@@ -20,3 +21,5 @@ app.listen(()=>{
     console.log(error);
 })
 })
+
+app.use('/api/user',UserRoutes)
