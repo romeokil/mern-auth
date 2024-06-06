@@ -1,14 +1,17 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import UserRoutes from './routes/UserRoutes.js'
 import AuthRoutes from './routes/AuthRoutes.js'
 dotenv.config();
 //INITIALIZIING THE APPLICATION
 const app=express();
 //DEFINING PORT NO
-const PORT=3000;
+const PORT=4000;
+app.use(cors({credentials:true,origin:'http://localhost:5173'}));
 app.use(express.json())
+
 // console.log(PORT)
 //SERVER CONNECTED!!1
 app.listen(PORT,()=>{
