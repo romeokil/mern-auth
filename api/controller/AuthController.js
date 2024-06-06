@@ -1,7 +1,7 @@
 import User from "../models/Usermodel.js";
 import bcryptjs from 'bcryptjs'
 
-export const signup=async(req,res)=>{
+export const signup=async(req,res,next)=>{
     console.log(req.body);
     const {username,email,password}=req.body;
     const hashPassword=bcryptjs.hashSync(password,10);
@@ -11,6 +11,6 @@ export const signup=async(req,res)=>{
         res.status(201).json({message:"signup credentials recieved!!"})
     }
     catch(error){
-        res.status(400).json(error.message)
+        next(error);
     }
 }
