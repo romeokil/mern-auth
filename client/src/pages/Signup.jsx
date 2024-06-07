@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 
 function Signup() {
   const [username,setusername]=useState('');
@@ -7,6 +7,7 @@ function Signup() {
   const [password,setpassword]=useState('');
   const [loading,setloading]=useState(false);
   const [errmsg,seterrmsg]=useState(false)
+  const Navigate=useNavigate();
   async function handleSubmit(ev){
     ev.preventDefault();
     try{
@@ -24,6 +25,7 @@ function Signup() {
         seterrmsg(true);
         return;
       }
+      Navigate('/signin');
     }
     catch(error){
       console.log("Error while signup",error.message);
@@ -42,7 +44,7 @@ function Signup() {
           <button className='bg-blue-900 p-2 rounded-xl font-semibold text-white'>{loading?'Loading...':'Submit'}</button>
       </form>
       <div className='flex max-w-lg mx-auto p-3 gap-2'>
-        <p>Having an account?</p>
+        <p>Don't have an account?</p>
         <Link to='/signin'>
           <p className='text-blue-600'>Sign in</p>
         </Link>
