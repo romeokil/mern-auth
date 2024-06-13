@@ -1,6 +1,7 @@
 import User from "../models/Usermodel.js";
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { errorHandler } from "../utils/error.js";
 
 export const signup=async(req,res,next)=>{
     const {username,email,password}=req.body;
@@ -21,9 +22,11 @@ export const signin=async(req,res,next)=>{
     // res.status(201).json({message:"Signin creadentials recieved!!"})
     try{
         const validUser=await User.findOne({email});
-        if(!validUser) res.status(404).json({message:"Not a valid User!!"})
+        // if(!validUser) res.status(404).json({message:"Not a valid User!!"})
+        if(!validUser) return next(errorHandler(401,'Not a valid User!!'));
         const validUserpassword=bcryptjs.compareSync(password,validUser.password);
-        if(!validUserpassword) res.status(401).json({message:"Password is wrong!!"});
+        // if(!validUserpassword) res.status(401).json({message:"Password is wrong!!"});
+        if(!validUserpassword) return next(errorHandler(404,'Password is wrong!!'));
         const {password:hashedPassword,...rest}=validUser._doc;
         const expiryDate=new Date(Date.now()+360000);  //1 hour
             const token=jwt.sign({id:validUser._id},process.env.SECRET_KEY);

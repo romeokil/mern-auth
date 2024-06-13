@@ -1,34 +1,38 @@
 import React,{useState} from 'react'
 import {Link,useNavigate} from 'react-router-dom'
-
+import {signInStart,signInSuccess,signInFailure} from '../redux/User/userSlice.js'
+import {useDispatch,useSelector} from 'react-redux'
 function Signin() {
   const [email,setemail]=useState('');
   const [password,setpassword]=useState('');
-  const [loading,setloading]=useState(false);
-  const [errmsg,seterrmsg]=useState(false)
+  const {loading ,error} =useSelector((state)=>state.user)
+  console.log("loading",loading,"error",error);
   const Navigate=useNavigate();
+  const dispatch=useDispatch();
   async function handleSubmit(ev){
     ev.preventDefault();
     try{
-      setloading(true);
-      seterrmsg(false);
+      dispatch(signInStart());
       let response=await fetch('http://localhost:4000/api/auth/signin',{
         method:'POST',
         body:JSON.stringify({email,password}),
         headers:{'Content-Type':'Application/json'},
         credentials:'include'
       })
-      setloading(false);
-      console.log(response);
-      if(!response.ok){
-        seterrmsg(true);
+      console.log("heeh data bnane ke pehle");
+      let data=await response.json();
+      // console.log("data bnana ke baad")
+      // console.log("data",data.message);
+      if(data.success==false){
+        dispatch(signInFailure(data.message));
         return;
       }
-      Navigate('/');
+        dispatch(signInSuccess(data));
+        Navigate('/');
     }
     catch(error){
-      console.log("Error while signup",error.message);
-      seterrmsg(true)
+      console.log("Error while signup",error);
+      dispatch(signInFailure(error));
     }
   }
   return (
@@ -47,7 +51,7 @@ function Signin() {
           <p className='text-blue-600'>Sign Up</p>
         </Link>
       </div>
-      <p className='p-2 text-red-800 text-center'>{errmsg?"Something went Wrong......":""}</p>
+      <p className='p-2 text-red-800 text-center'>{error?error||"Something went Wrong......":""}</p>
     </div>
   )
 }
