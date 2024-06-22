@@ -25,8 +25,7 @@ app.listen(PORT,()=>{
 .catch((error)=>{
     console.log(error);
 })
-})
-
+})                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 app.use('/api/user',UserRoutes)
 app.use('/api/auth',AuthRoutes)
 

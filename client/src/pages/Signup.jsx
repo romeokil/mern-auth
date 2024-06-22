@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import {Link,useNavigate} from 'react-router-dom'
+import OAuth from '../components/OAuth.jsx'
 
 function Signup() {
   const [username,setusername]=useState('');
@@ -41,7 +42,8 @@ function Signup() {
           value={email} onChange={(e)=>{setemail(e.target.value)}}/>
           <input type="password" className='p-2 bg-slate-100 rounded-xl' placeholder='Password' id='passwordid'
           value={password} onChange={(e)=>{setpassword(e.target.value)}}/>
-          <button className='bg-blue-900 p-2 rounded-xl font-semibold text-white'>{loading?'Loading...':'Submit'}</button>
+          <button className='bg-blue-900 hover:opacity-90 p-2 rounded-xl font-semibold text-white'>{loading?'Loading...':'Submit'}</button>
+          <OAuth/>
       </form>
       <div className='flex max-w-lg mx-auto p-3 gap-2'>
         <p>Don't have an account?</p>
