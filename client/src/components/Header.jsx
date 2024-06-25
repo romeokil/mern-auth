@@ -19,7 +19,7 @@ function Header() {
                 </Link>
                 <Link to='/profile'>
                   {currentUser?
-                  (<img className='h-7 w-7 object-cover rounded-xl mix-blend-multiply'src={currentUser.profilePicture} alt="profileimage"/>)
+                  (<img className='h-7 w-7 object-cover rounded-xl'src={currentUser.profilePicture} alt="profileimage"/>)
                   :(<li className='px-1'>Sign In</li>)}
                 </Link>
             </div>
