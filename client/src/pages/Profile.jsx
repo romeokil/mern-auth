@@ -42,7 +42,7 @@ function Profile() {
       <h1 className='text-3xl text-bold text-center p-5'>Profile</h1>
       <form className='flex flex-col gap-6 max-w-lg mx-auto'>
         <input type="file" ref={imageRef} onChange={(e)=>setImage(e.target.files[0])} hidden/>
-        <img className='h-24 w-24 object-cover rounded-full mx-auto'src={currentUser.profilePicture} alt="Profile Picture" onClick={()=>imageRef.current.click()}/>
+        <img className='h-24 w-24 object-cover rounded-full mx-auto'src={formData.profilePicture || currentUser.profilePicture} alt="Profile Picture" onClick={()=>imageRef.current.click()}/>
         <p className='text-center'>
         {  imageError?
           (
