@@ -28,8 +28,11 @@ function Signin() {
         dispatch(signInFailure(data.message));
         return;
       }
+      console.log("dispatch success se pehle")
         dispatch(signInSuccess(data));
+        console.log("navigate ke upar")
         Navigate('/');
+        console.log("Navigate ke niche")
     }
     catch(error){
       console.log("Error while signup",error);
@@ -53,7 +56,7 @@ function Signin() {
           <p className='text-blue-600'>Sign Up</p>
         </Link>
       </div>
-      <p className='p-2 text-red-800 text-center'>{error?error||"Something went Wrong......":""}</p>
+      <p className='p-2 text-red-800 text-center'>{error ? error.message ||"Something went Wrong......":""}</p>
     </div>
   )
 }

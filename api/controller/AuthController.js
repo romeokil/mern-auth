@@ -29,7 +29,7 @@ export const signin=async(req,res,next)=>{
         // if(!validUserpassword) res.status(401).json({message:"Password is wrong!!"});
         if(!validUserpassword) return next(errorHandler(404,'Password is wrong!!'));
         const {password:hashedPassword,...rest}=validUser._doc;
-        const expiryDate=new Date(Date.now()+360000);  //1 hour
+        const expiryDate=new Date(Date.now()+3600000);  //1 hour
             const token=jwt.sign({id:validUser._id},process.env.SECRET_KEY);
             res
             .cookie('accesstoken',token,{httpOnly:true,expires:expiryDate})

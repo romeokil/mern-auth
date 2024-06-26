@@ -9,7 +9,6 @@ export const test=(req,res)=>{
 }
 
 export const updateUser=async(req,res,next)=>{
-    console.log("updateduser me ghuss gy")
     if(req.user.id!==req.params.id){
         return next(errorHandler(402,"You cannot alter/update others details"))
     }

@@ -1,17 +1,19 @@
 import React,{useRef,useState,useEffect} from 'react'
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
 import {getDownloadURL, getStorage,ref,uploadBytesResumable} from 'firebase/storage'
 import {app} from '../firebase'
-
+import {updateuserStart,updateuserSuccess,updateuserFailure} from '../redux/User/userSlice'
 function Profile() {
+  const dispatch=useDispatch();
   const imageRef=useRef(null);
   const [image,setImage]=useState(null);
   const [imagePercent,setimagePercent]=useState(0);
   const [imageError,setimageError]=useState(false);
   const [formData,setformData]=useState({});
-  const {currentUser}=useSelector(state=>(state.user))
+  const [updateSuccess,setupdateSuccess]=useState(false);
+  const {currentUser,loading,error}=useSelector(state=>(state.user))
   // console.log(image);
-  console.log(formData);
+  // console.log(formData);
   useEffect(()=>{
     if(image) handleuploadImage(image);
   },[image])
@@ -37,10 +39,40 @@ function Profile() {
       }
     )
   }
+  const handleChange=(e)=>{
+    setformData({...formData,[e.target.id]:e.target.value})
+  }
+  const handleSubmit=async(e)=>{
+    console.log("formData",formData)
+    e.preventDefault();
+    try{
+    dispatch(updateuserStart());
+    const res=await fetch(`http://localhost:4000/api/user/update/${currentUser._id}`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'Application/json'
+      },
+      body:JSON.stringify(formData),
+      credentials:'include'
+    })
+    const data=await res.json();
+    if(data.success==false){
+      console.log("data success false me ghuss gy ho")
+        dispatch(updateuserFailure(data))
+        return;
+    }
+    dispatch(updateuserSuccess(data));
+    setupdateSuccess(true);
+  }
+  catch(error){
+    dispatch(updateuserFailure(error));
+  }
+
+  }
   return (
     <div className='p-3'>
       <h1 className='text-3xl text-bold text-center p-5'>Profile</h1>
-      <form className='flex flex-col gap-6 max-w-lg mx-auto'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-6 max-w-lg mx-auto'>
         <input type="file" ref={imageRef} onChange={(e)=>setImage(e.target.files[0])} hidden/>
         <img className='h-24 w-24 object-cover rounded-full mx-auto'src={formData.profilePicture || currentUser.profilePicture} alt="Profile Picture" onClick={()=>imageRef.current.click()}/>
         <p className='text-center'>
@@ -65,15 +97,19 @@ function Profile() {
           )
         }
         </p>
-          <input type="text" className='p-2 bg-slate-100 rounded-xl' placeholder='Username' id='usernameid' value={currentUser.username}/>
-          <input type="email" className='p-2 bg-slate-100 rounded-xl' placeholder='Email' id='emailid' value={currentUser.email} />
-          <input type="password" className='p-2 bg-slate-100 rounded-xl' placeholder='Password' id='passwordid'/>
-          <button className='bg-blue-900 hover:opacity-90 p-2 rounded-xl font-semibold text-white'>Update</button>
+          <input type="text" className='p-2 bg-slate-100 rounded-xl' placeholder='Username' id='username' defaultValue={currentUser.username} onChange={handleChange}/>
+          <input type="email" className='p-2 bg-slate-100 rounded-xl' placeholder='Email' id='email' defaultValue={currentUser.email} onChange={handleChange}/>
+          <input type="password" className='p-2 bg-slate-100 rounded-xl' placeholder='Password' id='password' onChange={handleChange}/>
+          <button className='bg-blue-900 hover:opacity-90 p-2 rounded-xl font-semibold text-white'>
+            {loading?"loading..":"Update"}
+          </button>
           <div className='flex justify-between'>
-            <span className='font-medium text-red-500'>Delete History</span>
-            <span className='font-medium text-blue-400'>Sign Up</span>
+            <span className='font-medium text-red-500'>Delete Account</span>
+            <span className='font-medium text-blue-400'>Sign Out</span>
           </div>
       </form>
+      <p className='text-red-500'>{error?"Updation not completed (Something went wrong)..":""}</p>
+      <p className='text-green-500 mt-3 text-center'>{updateSuccess?"Congrats!!! Updation Successfull":""}</p>
     </div>
   )
 }
