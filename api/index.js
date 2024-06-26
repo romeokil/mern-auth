@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import UserRoutes from './routes/UserRoutes.js'
 import AuthRoutes from './routes/AuthRoutes.js'
+import cookieParser from 'cookie-parser'
 dotenv.config();
 //INITIALIZIING THE APPLICATION
 const app=express();
@@ -11,6 +12,7 @@ const app=express();
 const PORT=4000;
 app.use(cors({credentials:true,origin:'http://localhost:5173'}));
 app.use(express.json())
+app.use(cookieParser());
 
 // console.log(PORT)
 //SERVER CONNECTED!!1
