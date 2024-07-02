@@ -2,7 +2,7 @@ import React,{useRef,useState,useEffect} from 'react'
 import {useSelector,useDispatch} from 'react-redux'
 import {getDownloadURL, getStorage,ref,uploadBytesResumable} from 'firebase/storage'
 import {app} from '../firebase'
-import {updateuserStart,updateuserSuccess,updateuserFailure,deleteuserStart,deleteuserSuccess,deleteuserFailure} from '../redux/User/userSlice'
+import {updateuserStart,updateuserSuccess,updateuserFailure,deleteuserStart,deleteuserSuccess,deleteuserFailure,signOut} from '../redux/User/userSlice'
 function Profile() {
   const dispatch=useDispatch();
   const imageRef=useRef(null);
@@ -86,6 +86,16 @@ function Profile() {
       dispatch(deleteuserFailure(error));
     }
   }
+  const handlesignOut=async()=>{
+    try{
+      //ye signout tmko kuch response ni bhejega 
+      await fetch('http://localhost:4000/api/auth/signout')
+      dispatch(signOut());
+    }
+    catch(error){
+      console.log("Error while signout",error)
+    }
+  }
   return (
     <div className='p-3'>
       <h1 className='text-3xl text-bold text-center p-5'>Profile</h1>
@@ -122,7 +132,7 @@ function Profile() {
           </button>
           <div className='flex justify-between'>
             <span onClick={handledeleteAccount} className='font-medium text-red-500'>Delete Account</span>
-            <span className='font-medium text-blue-400'>Sign Out</span>
+            <span onClick={handlesignOut} className='font-medium text-blue-400'>Sign Out</span>
           </div>
       </form>
       <p className='text-red-500 text-center'>{error?"Updation not completed (Something went wrong)..":""}</p>
