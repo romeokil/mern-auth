@@ -56,7 +56,7 @@ function Signin() {
           <p className='text-blue-600'>Sign Up</p>
         </Link>
       </div>
-      <p className='p-2 text-red-800 text-center'>{error ? error.message ||"Something went Wrong......":""}</p>
+      <p className='p-2 text-red-800 text-center'>{error ? error ||"Something went Wrong......":""}</p>
     </div>
   )
 }
