@@ -20,10 +20,11 @@ function OAuth() {
                 name:result.user.displayName,
                 email:result.user.email,
                 photo:result.user.photoURL,
-              })
+              }),
+        credentials:'include'
             })
             const data=await response.json();
-            // console.log(data)
+            console.log(data)
             dispatch(signInSuccess(data));
             Navigate('/')
             // console.log(data);
@@ -33,7 +34,7 @@ function OAuth() {
         }
     }
   return (
-    <button onClick={handleGoogleClick}className='bg-red-600 text-white p-2 rounded-xl hover:opacity-90 uppercase text-center'>Continue With Google</button>
+    <button type='button' onClick={handleGoogleClick}className='bg-red-600 text-white p-2 rounded-xl hover:opacity-90 uppercase text-center'>Continue With Google</button>
   )
 }
 

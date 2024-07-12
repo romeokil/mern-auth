@@ -47,6 +47,7 @@ function Profile() {
     e.preventDefault();
     try{
     dispatch(updateuserStart());
+    console.log("current user", currentUser._id)
     const res=await fetch(`http://localhost:4000/api/user/update/${currentUser._id}`,{
       method:'POST',
       headers:{
@@ -89,7 +90,9 @@ function Profile() {
   const handlesignOut=async()=>{
     try{
       //ye signout tmko kuch response ni bhejega 
-      await fetch('http://localhost:4000/api/auth/signout')
+      await fetch('http://localhost:4000/api/auth/signout',{
+credentials:'include'
+      })
       dispatch(signOut());
     }
     catch(error){
@@ -135,7 +138,7 @@ function Profile() {
             <span onClick={handlesignOut} className='font-medium text-blue-400'>Sign Out</span>
           </div>
       </form>
-      <p className='text-red-500 text-center'>{error?"Updation not completed (Something went wrong)..":""}</p>
+      <p className='text-red-500 text-center'>{error? JSON.stringify(error):""}</p>
       <p className='text-green-500 mt-3 text-center'>{updateSuccess?"Congrats!!! Updation Successfull":""}</p>
     </div>
   )

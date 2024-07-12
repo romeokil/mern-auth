@@ -31,6 +31,7 @@ export const signin=async(req,res,next)=>{
         const {password:hashedPassword,...rest}=validUser._doc;
         const expiryDate=new Date(Date.now()+3600000);  //1 hour
             const token=jwt.sign({id:validUser._id},process.env.SECRET_KEY);
+            console.log("token ormal sign in",token)
             res
             .cookie('accesstoken',token,{httpOnly:true,expires:expiryDate})
             .status(201)
@@ -41,50 +42,51 @@ export const signin=async(req,res,next)=>{
     }
 }
 
-export const google=async (req,res,next)=>{
-    // const {name,email,photo}=req.body;
-    // const {name,email,photo}=req.body;
-    try{
-        const existUser=await User.findOne({email:req.body.email});
-        // console.log("ha user mil gya",existUser)
-        if(existUser){
-            const {password:hashedPassword,...rest}=existUser._doc;
-            const expiryDate=new Date(Date.now()+3600000);//1 hour
-            const token=jwt.sign({id:existUser._id},process.env.SECRET_KEY);
+export const google = async (req, res, next) => {
+    const { name, email, photo } = req.body;
+
+    try {
+        const existUser = await User.findOne({ email });
+        if (existUser) {
+            const { password: hashedPassword, ...rest } = existUser._doc;
+            const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+            const token = jwt.sign({ id: existUser._id }, process.env.SECRET_KEY);
+
             res
-            .cookie('accesstoken',token,{httpOnly:true,expires:expiryDate})
-            .status(201)
-            .json(rest)
-        }
-        else{
-            const generaterandomPassword=(Math.random()*10).toString(36).slice(-8);
-            const hashedPassword=bcryptjs.hashSync(generaterandomPassword,10);
-            const endnumappend=Math.random()*10;
-            const stringendnum=endnumappend.toString().slice(-6)
-            const newUser=new User({
-                username:req.body.name.split(" ").join("").toLowerCase()+stringendnum,
-                email:req.body.email,
-                password:hashedPassword,
-                profilePicture:req.body.photo
-            })
-                await newUser.save();
-                // console.log("google wala se logged in hai ye",data);
-                const token=jwt.sign({id:newUser._id},process.env.SECRET_KEY)
-                const {password:hashedPassword2,...rest}=newUser._doc
-                const expiryDate=Date.now()+3600000;
-                res
-                .cookie('accesstoken',token,{httpOnly:true,expires:expiryDate})
+                .cookie('accesstoken', token, { httpOnly: true, expires: expiryDate, secure: true, sameSite: 'none' })
+                .status(200)
+                .json(rest);
+        } else {
+            const generateRandomPassword = (Math.random() * 10).toString(36).slice(-8);
+            const hashedPassword = bcryptjs.hashSync(generateRandomPassword, 10);
+            const endNumAppend = Math.floor(Math.random() * 1000000); // Ensure a number is appended
+            const username = name.split(" ").join("").toLowerCase() + endNumAppend;
+
+            const newUser = new User({
+                username,
+                email,
+                password: hashedPassword,
+                profilePicture: photo,
+            });
+
+            await newUser.save();
+
+            const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY);
+            const { password: hashedPassword2, ...rest } = newUser._doc;
+            const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+
+            res
+                .cookie('accesstoken', token, { httpOnly: true, expires: expiryDate, secure: true, sameSite: 'none' })
                 .status(201)
-                .json(rest)
+                .json(rest);
         }
-       
-    }
-    catch(error){
+    } catch (error) {
         next(error);
     }
-    
-}
+};
+
 
 export const signout= (req,res)=>{
+    console.log("asjbabd")
     res.clearCookie('accesstoken').status(201).json("Signout Successful")
 }
