@@ -34,7 +34,7 @@ function OAuth() {
         }
     }
   return (
-    <button type='button' onClick={handleGoogleClick}className='bg-red-600 text-white p-2 rounded-xl hover:opacity-90 uppercase text-center'>Continue With Google</button>
+    <button type='button' onClick={handleGoogleClick}className='bg-blue-600 text-white p-2 rounded-xl hover:opacity-90 uppercase text-center'>Continue With Google</button>
   )
 }
 
