@@ -48,7 +48,7 @@ function Profile() {
     try{
     dispatch(updateuserStart());
     console.log("current user", currentUser._id)
-    const res=await fetch(`http://localhost:4000/api/user/update/${currentUser._id}`,{
+    const res=await fetch(`https://mern-auth-2-9vbi.onrender.com/api/user/update/${currentUser._id}`,{
       method:'POST',
       headers:{
         'Content-Type':'Application/json'
@@ -72,7 +72,7 @@ function Profile() {
   const handledeleteAccount=async()=>{
     try{
       dispatch(deleteuserStart());
-      const res=await fetch(`http://localhost:4000/api/user/delete/${currentUser._id}`,{
+      const res=await fetch(`https://mern-auth-2-9vbi.onrender.com/api/user/delete/${currentUser._id}`,{
         method:'DELETE',
         credentials:'include'
       })
@@ -90,7 +90,7 @@ function Profile() {
   const handlesignOut=async()=>{
     try{
       //ye signout tmko kuch response ni bhejega 
-      await fetch('http://localhost:4000/api/auth/signout',{
+      await fetch('https://mern-auth-2-9vbi.onrender.com/api/auth/signout',{
 credentials:'include'
       })
       dispatch(signOut());

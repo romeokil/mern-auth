@@ -14,7 +14,7 @@ function Signup() {
     try{
       setloading(true);
       seterrmsg(false);
-      let response=await fetch('http://localhost:4000/api/auth/signup',{
+      let response=await fetch('https://mern-auth-2-9vbi.onrender.com/api/auth/signup',{
         method:'POST',
         body:JSON.stringify({username,email,password}),
         headers:{'Content-Type':'Application/json'},

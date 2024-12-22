@@ -12,7 +12,7 @@ const app=express();
 //DEFINING PORT NO
 const PORT=4000;
 const __dirname=path.resolve();
-app.use(cors({credentials:true,origin:'http://localhost:5173'}));
+app.use(cors({credentials:true,origin:'https://mern-auth-2-9vbi.onrender.com'}));
 app.use(express.json())
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname,"/client/dist")));
